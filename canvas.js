@@ -22,15 +22,19 @@ function redraw() {
     // Setting the stroke attributes
     context.strokeStyle = COLOR_DEFAULT;
     context.lineJoin = "round";
-    context.lineWidth = 5;
+    context.lineWidth = 3;
 
     // Drawing the saved paths
     for (var i = 0; i < clickX.length; i++) {
         context.beginPath();
         if (clickDrag[i] && i) {
-            context.moveTo(clickX[i - 1], clickY[i - 1]);
+            var xc = (clickX[i - 1] + clickX[i]) / 2;
+            var yc = (clickY[i - 1]  + clickY[i] ) / 2;
+            context.quadraticCurveTo(clickX[i - 1], clickY[i - 1], xc, yc);
         } else {
-            context.moveTo(clickX[i] - 1, clickY[i]);
+            var xc = (clickX[i] + clickX[i + 1]) / 2;
+            var yc = (clickY[i]  + clickY[i + 1] ) / 2;
+            context.quadraticCurveTo(clickX[i] - 1, clickY[i], xc, yc);
         }
         context.lineTo(clickX[i], clickY[i]);
         context.closePath();

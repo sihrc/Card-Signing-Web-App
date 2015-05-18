@@ -1,3 +1,7 @@
 #canvas {
     border: 5px solid seagreen;
 }
+
+.button-margin {
+    margin: 10 10 10 10;
+}

@@ -1,10 +1,15 @@
-init(300, 300);
-
 // Canvas Global Variables
 var clickX = new Array();
 var clickY = new Array();
 var clickDrag = new Array();
 var paint;
+
+var image = document.createElement('img');
+image.src = "./samples/29.jpg";
+image.onload = function () {
+    init(image.width, image.height);
+    context.drawImage(image, 0, 0);
+}
 
 // Colors
 var COLOR_DEFAULT = "#000F55";
@@ -23,6 +28,7 @@ function redraw() {
     context.strokeStyle = COLOR_DEFAULT;
     context.lineJoin = "round";
     context.lineWidth = 3;
+    context.drawImage(image, 0, 0);
 
     // Drawing the saved paths
     for (var i = 0; i < clickX.length; i++) {
@@ -47,29 +53,37 @@ function setupClickListeners() {
     if (!$canvas)
         console.log("error", "canvas was not initialized properly");
 
-    $canvas.mousedown(function(e) {
+    var mousedown = function(e) {
         var mouseX = e.pageX - this.offsetLeft;
         var mouseY = e.pageY - this.offsetTop;
 
         paint = true;
         addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
         redraw();
-    });
+    };
 
-    $canvas.mousemove(function(e) {
+    var mousemove = function(e) {
         if (paint) {
             addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop, true);
             redraw();
         }
-    });
+    };
 
-    $('#canvas').mouseup(function(e) {
+    var mousecancel = function(e) {
         paint = false;
-    });
+    };
 
-    $('#canvas').mouseleave(function(e) {
-        paint = false;
-    });
+    $canvas.mousedown(mousedown);
+    $canvas.on('vmousedown', mousedown);
+
+    $canvas.mousemove(mousemove);
+    $canvas.on('vmousemove', mousemove);
+
+
+    $canvas.mouseup(mousecancel);
+    $canvas.mouseleave(mousecancel);
+    $canvas.on('vmouseup', mousecancel);
+    $canvas.on('vmouseleave', mousecancel);
 }
 
 // Prepare for HTML5 Canvas Scripting

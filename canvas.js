@@ -112,15 +112,15 @@ function setupClickListeners() {
         saveStep();
     };
 
+    // regular browswer listeners
     $canvas.mousedown(mousedown);
-    $canvas.on('vmousedown', mousedown);
-
     $canvas.mousemove(mousemove);
-    $canvas.on('vmousemove', mousemove);
-
-
     $canvas.mouseup(mousecancel);
     $canvas.mouseleave(mousecancel);
+
+    // mobile listeners
+    $canvas.on('vmousemove', mousemove);
+    $canvas.on('vmousedown', mousedown);
     $canvas.on('vmouseup', mousecancel);
     $canvas.on('vmouseleave', mousecancel);
 }

@@ -6,7 +6,7 @@ var redoStack = [];
 $(document).ready(function () {
   // Setting the image to be used as background
   var image = document.createElement('img');
-  image.src = "https://slm-assets3.secondlife.com/assets/7071830/lightbox/greeting_card_balloons.jpg?1359617623";
+  image.src = "./samples/9.jpg";
   image.setAttribute('crossOrigin', 'anonymous');
   image.onload = function () {
     init(image.width, image.height);

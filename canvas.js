@@ -6,7 +6,7 @@ var redoStack = [];
 $(document).ready(function () {
   // Setting the image to be used as background
   var image = document.createElement('img');
-  image.src = "./samples/9.jpg";
+  image.src = "https://sihrc.github.io/samples/9.jpg";
   image.setAttribute('crossOrigin', 'anonymous');
   image.onload = function () {
     init(image.width, image.height);

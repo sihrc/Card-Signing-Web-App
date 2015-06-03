@@ -31,6 +31,8 @@ function previewFile() {
       init(newWidth, newHeight);
       context.drawImage(image, 0, 0, newWidth, newHeight);
       undoStack.push(signaturePad.toDataURL());
+
+      $('.button-tool').css('visibility', 'visible');
     };
   }
 
@@ -102,34 +104,38 @@ function init(canvasWidth, canvasHeight) {
     }
   };
 }
+
 function getViewport() {
   // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
   if (typeof window.innerWidth != 'undefined') {
-    viewPortWidth = window.innerWidth,
-      viewPortHeight = window.innerHeight
+    viewPortWidth = window.innerWidth;
+    viewPortHeight = window.innerHeight;
   }
 
   // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
   else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth !=
     'undefined' && document.documentElement.clientWidth != 0) {
-    viewPortWidth = document.documentElement.clientWidth,
-      viewPortHeight = document.documentElement.clientHeight
+    viewPortWidth = document.documentElement.clientWidth;
+    viewPortHeight = document.documentElement.clientHeight;
   }
 
   // older versions of IE
   else {
-    viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
-      viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
+    viewPortWidth = document.getElementsByTagName('body')[0].clientWidth;
+    viewPortHeight = document.getElementsByTagName('body')[0].clientHeight;
   }
+
+  // var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+  // var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
   return [viewPortWidth, viewPortHeight];
 }
 
-var checkOrientation = function(){
-    if(window.orientation !== previousOrientation){
-        previousOrientation = window.orientation;
-        // orientation changed, do your magic here
-        getViewport();
-    }
+var checkOrientation = function () {
+  if (window.orientation !== previousOrientation) {
+    previousOrientation = window.orientation;
+    // orientation changed, do your magic here
+    getViewport();
+  }
 };
 
 

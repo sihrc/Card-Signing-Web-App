@@ -1,20 +1,26 @@
 <html>
-    <head>
-    </head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="canvas.css">
-    <body>
-        <div id="container">
-          <input type="file" onchange="previewFile()"><br>
-            <div id="draw-card-canvas"></div>
-            <button class="btn button-margin" id="undo">Undo</button>
-            <button class="btn button-margin" id="redo">Redo</button>
-            <button class="btn button-margin" id="save">Save</button>
-        </div>
-    </body>
-    <script src="./libs/jquery-2.1.4.min.js"></script>
-    <script src="./libs/jquery-mobile.js"></script>
-    <script src="./signature.js"></script>
-    <script src="./canvas.js"></script>
+
+<head>
+</head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="canvas.css">
+
+<body>
+  <div id="container">
+    <span class="btn btn-default btn-file">
+      Pick a Card
+      <input type="file" onchange="previewFile()">
+    </span>
+    <div id="draw-card-canvas"></div>
+    <button class="btn btn-default button-tool" id="undo">Undo</button>
+    <button class="btn btn-default button-tool" id="redo">Redo</button>
+    <button class="btn btn-default button-tool" id="save">Save</button>
+  </div>
+</body>
+<script src="./libs/jquery-2.1.4.min.js"></script>
+<script src="./libs/jquery-mobile.js"></script>
+<script src="./signature.js"></script>
+<script src="./canvas.js"></script>
+
 </html>

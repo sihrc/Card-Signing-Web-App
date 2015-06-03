@@ -1,7 +1,29 @@
-#canvas {
-    border: 5px solid seagreen;
+.canvas {
+  border: 5px solid seagreen;
 }
-
-.button-margin {
-    margin: 10 10 10 10;
+.button-tool {
+  visibility: hidden;
+  background: white;
+  margin: 10 10 10 10;
+  border: 1px solid gray
+}
+.btn-file {
+  margin: 10 10 10 10;
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
 }

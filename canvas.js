@@ -1,36 +1,55 @@
 var signaturePad;
+var canvas;
 var undoStack = [];
 var redoStack = [];
 
-// On Document Load initialize everything
-$(document).ready(function () {
-  // Setting the image to be used as background
-  var image = document.createElement('img');
-  image.src = "https://sihrc.github.io/samples/9.jpg";
-  image.setAttribute('crossOrigin', 'anonymous');
-  image.onload = function () {
-    init(image.width, image.height);
-    context.drawImage(image, 0, 0);
-  };
-  setupButtons();
-});
+function previewFile() {
+  var file = document.querySelector('input[type=file]').files[0]; //sames as here
+  var reader = new FileReader();
 
-var setupButtons = function setupButtons() {
+  reader.onloadend = function () {
+    var image = document.createElement('img');
+    image.src = reader.result;
+    image.setAttribute('crossOrigin', 'anonymous');
+    image.onload = function () {
+      if (canvas)
+        document.getElementById('draw-card-canvas').removeChild(canvas);
+      init(image.width, image.height);
+      context.drawImage(image, 0, 0);
+      undoStack.push(signaturePad.toDataURL());
+    };
+  }
+
+  if (file) {
+    reader.readAsDataURL(file); //reads the data as a URL
+  } else {
+    preview.src = "";
+  }
+}
+
+function setupButtons() {
   $('#undo').click(function (e) {
+    if (undoStack.length == 0)
+      return;
+
     e.preventDefault();
 
-    var data = undoStack.pop();
-    redoStack.push(data);
+    redoStack.push(undoStack.pop());
 
-    signaturePad.fromDataURL(data);
+    if (undoStack.length > 0)
+      signaturePad.fromDataURL(undoStack[undoStack.length - 1]);
+    else
+      signaturePad.clear();
   });
 
   $('#redo').click(function (e) {
+    if (redoStack.length == 0) {
+      return;
+    }
     e.preventDefault();
 
     var data = redoStack.pop();
     undoStack.push(data);
-
     signaturePad.fromDataURL(data);
   });
 
@@ -62,8 +81,6 @@ function init(canvasWidth, canvasHeight) {
   context = canvas.getContext("2d");
   signaturePad = new SignaturePad(canvas);
 
-  undoStack.push(signaturePad.toDataURL());
-
   signaturePad.onEnd = function () {
     undoStack.push(signaturePad.toDataURL());
     if (undoStack.length > 10) {
@@ -71,3 +88,8 @@ function init(canvasWidth, canvasHeight) {
     }
   };
 }
+
+// On Document Load initialize everything
+$(document).ready(function () {
+  setupButtons();
+});

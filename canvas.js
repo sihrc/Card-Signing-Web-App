@@ -1,4 +1,4 @@
-var signaturePad;
+var handwriting;
 var canvas;
 
 var previousOrientation;
@@ -30,7 +30,8 @@ function previewFile() {
 
       init(newWidth, newHeight);
       context.drawImage(image, 0, 0, newWidth, newHeight);
-      undoStack.push(signaturePad.toDataURL());
+
+      undoStack.push(handwriting.toDataURL());
 
       $('.button-tool').css('visibility', 'visible');
     };
@@ -53,9 +54,9 @@ function setupButtons() {
     redoStack.push(undoStack.pop());
 
     if (undoStack.length > 0)
-      signaturePad.fromDataURL(undoStack[undoStack.length - 1]);
+      handwriting.fromDataURL(undoStack[undoStack.length - 1]);
     else
-      signaturePad.clear();
+      handwriting.clear();
   });
 
   $('#redo').click(function (e) {
@@ -66,12 +67,12 @@ function setupButtons() {
 
     var data = redoStack.pop();
     undoStack.push(data);
-    signaturePad.fromDataURL(data);
+    handwriting.fromDataURL(data);
   });
 
   $('#save').click(function (e) {
     e.preventDefault();
-    console.log(signaturePad.toDataURL());
+    console.log(handwriting.toDataURL());
   });
 };
 
@@ -95,10 +96,10 @@ function init(canvasWidth, canvasHeight) {
 
 
   context = canvas.getContext("2d");
-  signaturePad = new SignaturePad(canvas);
+  handwriting = new Handwriting(canvas);
 
-  signaturePad.onEnd = function () {
-    undoStack.push(signaturePad.toDataURL());
+  handwriting.onEnd = function () {
+    undoStack.push(handwriting.toDataURL());
     if (undoStack.length > 10) {
       undoStack.shift();
     }
@@ -125,8 +126,6 @@ function getViewport() {
     viewPortHeight = document.getElementsByTagName('body')[0].clientHeight;
   }
 
-  // var viewPortWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-  // var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
   return [viewPortWidth, viewPortHeight];
 }
 

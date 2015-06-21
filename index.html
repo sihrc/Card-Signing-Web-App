@@ -1,21 +1,28 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
 <html>
-
 <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="canvas.css">
 
 <body>
-  <div id="container">
+  <div id="container" class="container">
     <span class="btn btn-default btn-file">
       Pick a Card
       <input type="file" onchange="previewFile()">
     </span>
-    <div id="draw-card-canvas"></div>
     <button class="btn btn-default button-tool" id="undo">Undo</button>
     <button class="btn btn-default button-tool" id="redo">Redo</button>
     <button class="btn btn-default button-tool" id="save">Save</button>
+    <br>
+    <div id="stacked" class="stacked">
+        <img id="canvas-background" class="canvas-background"></img>
+        <div id="draw-card-canvas" class="draw-card-canvas"></div>
+    </div>
   </div>
 </body>
 <script src="./libs/jquery-2.1.4.min.js"></script>

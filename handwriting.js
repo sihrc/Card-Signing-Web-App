@@ -234,6 +234,22 @@ var Handwriting = (function (document) {
         this._isEmpty = false;
     };
 
+    Handwriting.prototype.getPoints = function (x, y, size) {
+        var ctx = this._ctx;
+
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        this._isEmpty = false;
+    };
+
+    Handwriting.prototype.fromPoints = function (x, y, size) {
+        var ctx = this._ctx;
+
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        this._isEmpty = false;
+    };
+
     Handwriting.prototype._drawCurve = function (curve, startWidth, endWidth) {
         var ctx = this._ctx,
             widthDelta = endWidth - startWidth,

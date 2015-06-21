@@ -13,7 +13,7 @@ function previewFile() {
   var reader = new FileReader();
 
   reader.onloadend = function () {
-    var image = document.createElement('img');
+    var image = document.getElementById('canvas-background');
     image.src = reader.result;
     image.setAttribute('crossOrigin', 'anonymous');
 
@@ -27,9 +27,9 @@ function previewFile() {
 
       var newWidth = image.width * scaleFactor;
       var newHeight = image.height * scaleFactor;
-
+      image.width = newWidth;
+      image.height = newHeight;
       init(newWidth, newHeight);
-      context.drawImage(image, 0, 0, newWidth, newHeight);
 
       undoStack.push(handwriting.toDataURL());
 
@@ -39,8 +39,6 @@ function previewFile() {
 
   if (file) {
     reader.readAsDataURL(file); //reads the data as a URL
-  } else {
-    preview.src = "";
   }
 }
 
@@ -84,6 +82,7 @@ function init(canvasWidth, canvasHeight) {
   // Set Canvas Attributes
   canvas.setAttribute('width', canvasWidth);
   canvas.setAttribute('height', canvasHeight);
+  document.getElementById('stacked').setAttribute('height', canvasHeight);
   canvas.setAttribute('id', 'canvas');
 
   // Add canvas to existing div

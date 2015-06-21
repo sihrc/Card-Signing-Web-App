@@ -31,8 +31,6 @@ function previewFile() {
       image.height = newHeight;
       init(newWidth, newHeight);
 
-      undoStack.push(handwriting.toDataURL());
-
       $('.button-tool').css('visibility', 'visible');
     };
   }
@@ -48,7 +46,6 @@ function setupButtons() {
       return;
 
     e.preventDefault();
-
     redoStack.push(undoStack.pop());
 
     if (undoStack.length > 0)
@@ -70,7 +67,8 @@ function setupButtons() {
 
   $('#save').click(function (e) {
     e.preventDefault();
-    console.log(handwriting.toDataURL());
+    var url = handwriting.toDataURL().replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+    window.open(url);
   });
 };
 
@@ -82,7 +80,6 @@ function init(canvasWidth, canvasHeight) {
   // Set Canvas Attributes
   canvas.setAttribute('width', canvasWidth);
   canvas.setAttribute('height', canvasHeight);
-  document.getElementById('stacked').setAttribute('height', canvasHeight);
   canvas.setAttribute('id', 'canvas');
 
   // Add canvas to existing div
@@ -98,6 +95,7 @@ function init(canvasWidth, canvasHeight) {
   handwriting = new Handwriting(canvas);
 
   handwriting.onEnd = function () {
+    redoStack.length = 0;
     undoStack.push(handwriting.toDataURL());
     if (undoStack.length > 10) {
       undoStack.shift();

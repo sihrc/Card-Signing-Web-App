@@ -46,6 +46,7 @@ var Handwriting = (function (document) {
             height = this._canvas.height;
 
         this._reset();
+        this.clear();
         image.src = dataUrl;
         image.onload = function () {
             self._ctx.drawImage(image, 0, 0, width, height);

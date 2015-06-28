@@ -15,7 +15,6 @@ function previewFile() {
   reader.onloadend = function () {
     var image = document.getElementById('canvas-background');
     image.src = reader.result;
-    image.setAttribute('crossOrigin', 'anonymous');
 
     image.onload = function () {
       if (canvas)
@@ -146,5 +145,4 @@ $(document).ready(function () {
 
   window.addEventListener("resize", checkOrientation, false);
   window.addEventListener("orientationchange", checkOrientation, false);
-
 });

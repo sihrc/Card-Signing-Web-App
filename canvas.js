@@ -66,8 +66,14 @@ function setupButtons() {
 
   $('#save').click(function (e) {
     e.preventDefault();
-    var url = handwriting.toDataURL().replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-    window.open(url);
+    $('.output').remove();
+    // PNG
+    var png = handwriting.toDataURL().replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+     $('#buttons').append($("<a class='output' download='output.png' href='" + png + "' title='output.png'><button class='btn btn-default button-tool' style='visibility: visible;'>PNG</button></a>"));
+
+    // SVG
+    var svg = "data:application/octet-streamng;base64," + btoa(unescape(encodeURIComponent(handwriting.toSVG())));
+     $('#buttons').append($("<a class='output' download='output.svg' href='" + svg + "' title='output.svg'><button class='btn btn-default button-tool' style='visibility: visible;'>SVG</button></a>"));
   });
 };
 
@@ -89,8 +95,6 @@ function init(canvasWidth, canvasHeight) {
     canvas = G_vmlCanvasManager.initElement(canvas);
   }
 
-
-  context = canvas.getContext("2d");
   handwriting = new Handwriting(canvas);
 
   handwriting.onEnd = function () {

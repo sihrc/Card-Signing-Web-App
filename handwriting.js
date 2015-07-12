@@ -1,3 +1,4 @@
+var SVG_WIDTH = 1;
 var Handwriting = (function (document) {
     "use strict";
 
@@ -315,7 +316,7 @@ var Handwriting = (function (document) {
             dotSize = typeof(this.dotSize) === 'function' ? this.dotSize() : this.dotSize;
 
         ctx.beginPath();
-        this._drawPointSVG(point.x, point.y, dotSize);
+        this._drawPointSVG(point.x, point.y, SVG_WIDTH);
         ctx.closePath();
         ctx.fill();
     };
@@ -324,24 +325,27 @@ var Handwriting = (function (document) {
     Handwriting.prototype._drawPointSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        ctx.moveTo(x, y);
-        ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        // ctx.moveTo(x, y);
+        // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        ctx.lineTo(x, y);
         this._isEmpty = false;
     };
 
     Handwriting.prototype.getPointsSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        ctx.moveTo(x, y);
-        ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        // ctx.moveTo(x, y);
+        // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        ctx.lineTo(x, y);
         this._isEmpty = false;
     };
 
     Handwriting.prototype.fromPointsSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        ctx.moveTo(x, y);
-        ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        // ctx.moveTo(x, y);
+        // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        ctx.lineTo(x, y);
         this._isEmpty = false;
     };
 
@@ -350,7 +354,7 @@ var Handwriting = (function (document) {
             widthDelta = endWidth - startWidth,
             drawSteps, width, i, t, tt, ttt, u, uu, uuu, x, y;
 
-        drawSteps = Math.floor(curve.length());
+        drawSteps = 200;//Math.floor(curve.length());
         ctx.beginPath();
         for (i = 0; i < drawSteps; i++) {
             // Calculate the Bezier (x, y) coordinate for this step.
@@ -372,7 +376,7 @@ var Handwriting = (function (document) {
             y += ttt * curve.endPoint.y;
 
             width = startWidth + ttt * widthDelta;
-            this._drawPointSVG(x, y, width);
+            this._drawPointSVG(x, y, SVG_WIDTH);
         }
         ctx.closePath();
         ctx.fill();

@@ -349,12 +349,16 @@ var Handwriting = (function (document) {
         this._isEmpty = false;
     };
 
+    Handwriting.prototype.setDrawSteps = function (steps) {
+        this._drawSteps = steps;
+    }
+
     Handwriting.prototype._drawCurveSVG = function (curve, startWidth, endWidth) {
         var ctx = this._svgctx,
             widthDelta = endWidth - startWidth,
             drawSteps, width, i, t, tt, ttt, u, uu, uuu, x, y;
 
-        drawSteps = 200;//Math.floor(curve.length());
+        drawSteps = this._drawSteps || Math.floor(curve.length());
         ctx.beginPath();
         for (i = 0; i < drawSteps; i++) {
             // Calculate the Bezier (x, y) coordinate for this step.

@@ -106,6 +106,12 @@ function init(canvasWidth, canvasHeight) {
   };
 }
 
+$('#resolution').on('change keypress paste input', function () {
+    if (!handwriting)
+        return;
+    handwriting.setDrawSteps($('#resolution').val());
+})
+
 function getViewport() {
   // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
   if (typeof window.innerWidth != 'undefined') {

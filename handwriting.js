@@ -3,8 +3,7 @@ var Handwriting = (function (document) {
     "use strict";
 
     var Handwriting = function (canvas, options) {
-        var self = this,
-            opts = options || {};
+        var opts = options || {};
 
         this.velocityFilterWeight = opts.velocityFilterWeight || 0.7;
         this.minWidth = opts.minWidth || 0.5;
@@ -45,7 +44,19 @@ var Handwriting = (function (document) {
     };
 
     Handwriting.prototype.toSVG = function () {
-        return this._svgctx.getSerializedSvg();
+        var serialized = this._svgctx.getSerializedSvg();
+        var metadata = "<metadata id=\"metadata298\"><rdf:RDF><cc:Work rdf:about=\"\"><dc:format>image/svg+xml</dc:format><dc:type rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata>";
+        var index = serialized.indexOf("<defs");
+        var tags = " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n" +
+            " xmlns:cc=\"http://creativecommons.org/ns#\"\n" +
+            " xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" +
+            " xmlns=\"http://www.w3.org/2000/svg\"";
+
+
+        serialized = serialized.slice(0, index) + metadata + serialized.slice(index, serialized.length);
+        serialized = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + serialized;
+        serialized = serialized.replace(" xmlns=\"http://www.w3.org/2000/svg\"", tags);
+        return serialized;
     }
 
     Handwriting.prototype.fromDataURL = function (dataUrl) {

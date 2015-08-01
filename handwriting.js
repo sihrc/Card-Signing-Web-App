@@ -336,27 +336,27 @@ var Handwriting = (function (document) {
     Handwriting.prototype._drawPointSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        // ctx.moveTo(x, y);
         // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
         ctx.lineTo(x, y);
+        ctx.moveTo(x, y);
         this._isEmpty = false;
     };
 
     Handwriting.prototype.getPointsSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        // ctx.moveTo(x, y);
         // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
         ctx.lineTo(x, y);
+        ctx.moveTo(x, y);
         this._isEmpty = false;
     };
 
     Handwriting.prototype.fromPointsSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        // ctx.moveTo(x, y);
         // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
         ctx.lineTo(x, y);
+        ctx.moveTo(x, y);
         this._isEmpty = false;
     };
 

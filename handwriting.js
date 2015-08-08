@@ -81,6 +81,7 @@ var Handwriting = (function (document) {
 
     Handwriting.prototype._strokeBegin = function (event) {
         this._reset();
+        this._last_end_point = undefined;
         this._strokeUpdate(event);
         if (typeof this.onBegin === 'function') {
             this.onBegin(event);
@@ -394,7 +395,7 @@ var Handwriting = (function (document) {
 
             width = startWidth + ttt * widthDelta;
             this._drawPointSVG(x, y, SVG_WIDTH);
-            if (i == drawSteps - 2) {
+            if (i == drawSteps - 1) {
                 this._last_end_point = new Point(x, y)
             }
         }

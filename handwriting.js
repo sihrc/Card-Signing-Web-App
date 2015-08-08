@@ -369,6 +369,8 @@ var Handwriting = (function (document) {
             widthDelta = endWidth - startWidth,
             drawSteps, width, i, t, tt, ttt, u, uu, uuu, x, y;
 
+        curve.startPoint = this._last_end_point || curve.startPoint;
+
         drawSteps = this._drawSteps || Math.floor(curve.length());
         ctx.beginPath();
         for (i = 0; i < drawSteps; i++) {
@@ -392,7 +394,11 @@ var Handwriting = (function (document) {
 
             width = startWidth + ttt * widthDelta;
             this._drawPointSVG(x, y, SVG_WIDTH);
+            if (i == drawSteps - 2) {
+                this._last_end_point = new Point(x, y)
+            }
         }
+
         ctx.closePath();
         ctx.fill();
     };

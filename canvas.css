@@ -7,10 +7,6 @@
   position:absolute;
 }
 
-#resolution {
-    width:200px;
-}
-
 .container {
     display:inline-block;
     margin: 0 auto;
@@ -46,4 +42,12 @@
   background: white;
   cursor: inherit;
   display: block;
+}
+
+.item{
+  margin: 3px;
+}
+.item img{
+  display: block;
+  height: 100px;
 }

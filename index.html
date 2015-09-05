@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="./libs/owl.carousel.min.css">
+<link rel="stylesheet" href="./libs/owl.theme.green.min.css">
 <link rel="stylesheet" type="text/css" href="canvas.css">
+
 
 <body>
   <div id="container" class="container">
@@ -19,22 +22,20 @@
         <button class="btn btn-default button-tool" id="undo">Undo</button>
         <button class="btn btn-default button-tool" id="redo">Redo</button>
         <button class="btn btn-default button-tool" id="save">Save</button>
-        <div class="form-group btn-file">
-          <label for="resolution">Resolution:</label>
-          <input type="number" class="form-control" id="resolution">
-        </div>
     </div>
+    <br>
+    <div id="carousel" class="owl-carousel owl-theme"></div>
     <br>
     <div id="stacked" class="stacked">
         <img id="canvas-background" class="canvas-background"></img>
         <div id="draw-card-canvas" class="draw-card-canvas"></div>
     </div>
   </div>
+  <script src="./libs/jquery-2.1.4.min.js"></script>
+  <script src="./libs/jquery-mobile.js"></script>
+  <script src="./libs/owl.carousel.min.js"></script>
+  <script src="./minified/canvas2svg.js"></script>
+  <script src="./minified/handwriting.js"></script>
+  <script src="./minified/canvas.js"></script>
 </body>
-<script src="./libs/jquery-2.1.4.min.js"></script>
-<script src="./libs/jquery-mobile.js"></script>
-<script src="./minified/canvas2svg.js"></script>
-<script src="./minified/handwriting.js"></script>
-<script src="./minified/canvas.js"></script>
-
 </html>

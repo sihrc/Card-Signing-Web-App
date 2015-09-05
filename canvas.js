@@ -1,5 +1,6 @@
 var handwriting;
 var canvas;
+var owl;
 
 var previousOrientation;
 var viewPortWidth;
@@ -8,14 +9,31 @@ var viewPortHeight;
 var undoStack = [];
 var redoStack = [];
 
-function previewFile() {
-  var file = document.querySelector('input[type=file]').files[0]; //sames as here
-  var reader = new FileReader();
+// Preload
+for (var num = 1; num <= 14; num++) {
+    $('.owl-carousel').append("<div class=\"item\"> <img onclick=\"choose(this.src)\" class=\"lazyOwl\" src=\"" + "./samples/fullsize-" + num + ".jpg" + "\"></img></div>")
+}
 
-  reader.onloadend = function () {
+function loadCarousel() {
+    $('#carousel').owlCarousel({
+        margin:10,
+        loop:true,
+        autoWidth:true,
+        items:4
+    });
+
+    owl = $('#carousel').data('owl.carousel');
+}
+
+function choose(src) {
     var image = document.getElementById('canvas-background');
-    image.src = reader.result;
+    if (image) { image.remove(); }
 
+    image = document.createElement('img');
+    image.setAttribute('id', "canvas-background");
+    document.getElementById("stacked").appendChild(image);
+    image.src = src;
+    $(image).css("visibility", "invisible");
     image.onload = function () {
       if (canvas)
         document.getElementById('draw-card-canvas').removeChild(canvas);
@@ -23,15 +41,22 @@ function previewFile() {
       var scaleX = viewPortWidth / image.width;
       var scaleY = viewPortHeight / image.height;
       var scaleFactor = scaleX > scaleY ? scaleY : scaleX;
-
       var newWidth = image.width * scaleFactor;
       var newHeight = image.height * scaleFactor;
       image.width = newWidth;
       image.height = newHeight;
       init(newWidth, newHeight);
-
+      $(image).css("visibility", "visible");
       $('.button-tool').css('visibility', 'visible');
     };
+}
+
+function previewFile() {
+  var file = document.querySelector('input[type=file]').files[0];
+  var reader = new FileReader();
+
+  reader.onloadend = function () {
+      owl.add("<div class=\"item\"> <img onclick=\"choose(this.src)\" class=\"lazyOwl\" src=\"" + reader.result + "\"></img></div>", 0);
   }
 
   if (file) {
@@ -86,6 +111,8 @@ function init(canvasWidth, canvasHeight) {
   canvas.setAttribute('width', canvasWidth);
   canvas.setAttribute('height', canvasHeight);
   canvas.setAttribute('id', 'canvas');
+  canvasDiv.setAttribute('width', canvasWidth);
+  canvasDiv.setAttribute('height', canvasHeight);
 
   // Add canvas to existing div
   canvasDiv.appendChild(canvas);
@@ -106,11 +133,6 @@ function init(canvasWidth, canvasHeight) {
   };
 }
 
-$('#resolution').on('change keypress paste input', function () {
-    if (!handwriting)
-        return;
-    handwriting.setDrawSteps($('#resolution').val());
-})
 
 function getViewport() {
   // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
@@ -139,17 +161,19 @@ var checkOrientation = function () {
   if (window.orientation !== previousOrientation) {
     previousOrientation = window.orientation;
     // orientation changed, do your magic here
-    getViewport();
   }
+  getViewport();
 };
 
 
 // (optional) Android doesn't always fire orientationChange on 180 degree turns
 setInterval(checkOrientation, 2000);
+
 // On Document Load initialize everything
 $(document).ready(function () {
   setupButtons();
   getViewport();
+  loadCarousel();
 
   previousOrientation = window.orientation;
 

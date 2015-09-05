@@ -372,7 +372,7 @@ var Handwriting = (function (document) {
 
         curve.startPoint = this._last_end_point || curve.startPoint;
 
-        drawSteps = this._drawSteps || Math.floor(curve.length());
+        drawSteps = 4;//this._drawSteps || Math.floor(curve.length());
         ctx.beginPath();
         for (i = 0; i < drawSteps; i++) {
             // Calculate the Bezier (x, y) coordinate for this step.

@@ -1,17 +1,20 @@
-var handwriting;
-var canvas;
-var owl;
+// Canvas
+var handwriting,
+canvas,
+owl;
 
-var previousOrientation;
-var viewPortWidth;
-var viewPortHeight;
+// Screen size handling
+var previousOrientation,
+viewPortWidth,
+viewPortHeight;
 
-var undoStack = [];
-var redoStack = [];
+// Stroke history
+var undoStack = [],
+redoStack = [];
 
-// Preload
+// Preload images into carousel
 for (var num = 1; num <= 14; num++) {
-    $('.owl-carousel').append("<div class=\"item\"> <img onclick=\"choose(this.src)\" class=\"lazyOwl\" src=\"" + "./samples/fullsize-" + num + ".jpg" + "\"></img></div>")
+    $('.owl-carousel').append("<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" class=\"lazyOwl\" src=\"" + "./samples/fullsize-" + num + ".jpg" + "\"></img></div>")
 }
 
 function loadCarousel() {
@@ -25,7 +28,7 @@ function loadCarousel() {
     owl = $('#carousel').data('owl.carousel');
 }
 
-function choose(src) {
+function chooseImage(src) {
     var image = document.getElementById('canvas-background');
     if (image) { image.remove(); }
 
@@ -35,134 +38,132 @@ function choose(src) {
     image.src = src;
     $(image).css("visibility", "invisible");
     image.onload = function () {
-      if (canvas)
+        if (canvas)
         document.getElementById('draw-card-canvas').removeChild(canvas);
-
-      var scaleX = viewPortWidth / image.width;
-      var scaleY = viewPortHeight / image.height;
-      var scaleFactor = scaleX > scaleY ? scaleY : scaleX;
-      var newWidth = image.width * scaleFactor;
-      var newHeight = image.height * scaleFactor;
-      image.width = newWidth;
-      image.height = newHeight;
-      init(newWidth, newHeight);
-      $(image).css("visibility", "visible");
-      $('.button-tool').css('visibility', 'visible');
+        //Scaling canvas and background image appropriately
+        var scaleX = viewPortWidth / image.width;
+        var scaleY = viewPortHeight / image.height;
+        var scaleFactor = scaleX > scaleY ? scaleY : scaleX;
+        var newWidth = image.width * scaleFactor;
+        var newHeight = image.height * scaleFactor;
+        image.width = newWidth;
+        image.height = newHeight;
+        init(newWidth, newHeight);
+        $(image).css("visibility", "visible");
+        $('.button-tool').css('visibility', 'visible');
     };
 }
 
 function previewFile() {
-  var file = document.querySelector('input[type=file]').files[0];
-  var reader = new FileReader();
+    var file = document.querySelector('input[type=file]').files[0];
+    var reader = new FileReader();
 
-  reader.onloadend = function () {
-      owl.add("<div class=\"item\"> <img onclick=\"choose(this.src)\" class=\"lazyOwl\" src=\"" + reader.result + "\"></img></div>", 0);
-  }
+    reader.onloadend = function () {
+        owl.add("<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" class=\"lazyOwl\" src=\"" + reader.result + "\"></img></div>", 0);
+    }
 
-  if (file) {
-    reader.readAsDataURL(file); //reads the data as a URL
-  }
+    if (file) {
+        reader.readAsDataURL(file); //reads the data as a URL
+    }
 }
 
 function setupButtons() {
-  $('#undo').click(function (e) {
-    if (undoStack.length == 0)
-      return;
+    $('#undo').click(function (e) {
+        if (undoStack.length == 0)
+        return;
 
-    e.preventDefault();
-    redoStack.push(undoStack.pop());
+        e.preventDefault();
+        redoStack.push(undoStack.pop());
 
-    if (undoStack.length > 0)
-      handwriting.fromDataURL(undoStack[undoStack.length - 1]);
-    else
-      handwriting.clear();
-  });
+        if (undoStack.length > 0)
+        handwriting.fromDataURL(undoStack[undoStack.length - 1]);
+        else
+        handwriting.clear();
+    });
 
-  $('#redo').click(function (e) {
-    if (redoStack.length == 0) {
-      return;
-    }
-    e.preventDefault();
+    $('#redo').click(function (e) {
+        if (redoStack.length == 0) {
+            return;
+        }
+        e.preventDefault();
 
-    var data = redoStack.pop();
-    undoStack.push(data);
-    handwriting.fromDataURL(data);
-  });
+        var data = redoStack.pop();
+        undoStack.push(data);
+        handwriting.fromDataURL(data);
+    });
 
-  $('#save').click(function (e) {
-    e.preventDefault();
-    $('.output').remove();
-    // PNG
-    var png = handwriting.toDataURL().replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-     $('#buttons').append($("<a class='output' download='output.png' href='" + png + "' title='output.png'><button class='btn btn-default button-tool' style='visibility: visible;'>PNG</button></a>"));
+    $('#save').click(function (e) {
+        e.preventDefault();
+        $('.output').remove();
+        // PNG
+        var png = handwriting.toDataURL().replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+        $('#buttons').append($("<a class='output' download='output.png' href='" + png + "' title='output.png'><button class='btn btn-default button-tool' style='visibility: visible;'>PNG</button></a>"));
 
-    // SVG
-    var svg = "data:application/octet-streamng;base64," + btoa(unescape(encodeURIComponent(handwriting.toSVG())));
-     $('#buttons').append($("<a class='output' download='output.svg' href='" + svg + "' title='output.svg'><button class='btn btn-default button-tool' style='visibility: visible;'>SVG</button></a>"));
-  });
+        // SVG
+        var svg = "data:application/octet-streamng;base64," + btoa(unescape(encodeURIComponent(handwriting.toSVG())));
+        $('#buttons').append($("<a class='output' download='output.svg' href='" + svg + "' title='output.svg'><button class='btn btn-default button-tool' style='visibility: visible;'>SVG</button></a>"));
+    });
 };
 
 // Prepare for HTML5 Canvas Scripting
 function init(canvasWidth, canvasHeight) {
-  var canvasDiv = document.getElementById('draw-card-canvas');
-  canvas = document.createElement('canvas');
+    var canvasDiv = document.getElementById('draw-card-canvas');
+    canvas = document.createElement('canvas');
 
-  // Set Canvas Attributes
-  canvas.setAttribute('width', canvasWidth);
-  canvas.setAttribute('height', canvasHeight);
-  canvas.setAttribute('id', 'canvas');
-  canvasDiv.setAttribute('width', canvasWidth);
-  canvasDiv.setAttribute('height', canvasHeight);
+    // Set Canvas Attributes
+    canvas.setAttribute('width', canvasWidth);
+    canvas.setAttribute('height', canvasHeight);
+    canvas.setAttribute('id', 'canvas');
+    canvasDiv.setAttribute('width', canvasWidth);
+    canvasDiv.setAttribute('height', canvasHeight);
 
-  // Add canvas to existing div
-  canvasDiv.appendChild(canvas);
+    // Add canvas to existing div
+    canvasDiv.appendChild(canvas);
 
-  // Check to initialize canvas
-  if (typeof G_vmlCanvasManager != 'undefined') {
-    canvas = G_vmlCanvasManager.initElement(canvas);
-  }
-
-  handwriting = new Handwriting(canvas);
-
-  handwriting.onEnd = function () {
-    redoStack.length = 0;
-    undoStack.push(handwriting.toDataURL());
-    if (undoStack.length > 10) {
-      undoStack.shift();
+    // Check to initialize canvas
+    if (typeof G_vmlCanvasManager != 'undefined') {
+        canvas = G_vmlCanvasManager.initElement(canvas);
     }
-  };
+
+    handwriting = new Handwriting(canvas);
+
+    handwriting.onEnd = function () {
+        redoStack.length = 0;
+        undoStack.push(handwriting.toDataURL());
+        if (undoStack.length > 10) {
+            undoStack.shift();
+        }
+    };
 }
 
 
-function getViewport() {
-  // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
-  if (typeof window.innerWidth != 'undefined') {
-    viewPortWidth = window.innerWidth;
-    viewPortHeight = window.innerHeight;
-  }
+function updateViewPort() {
+    // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+    if (typeof window.innerWidth != 'undefined') {
+        viewPortWidth = window.innerWidth;
+        viewPortHeight = window.innerHeight;
+    }
 
-  // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
-  else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth !=
+    // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+    else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth !=
     'undefined' && document.documentElement.clientWidth != 0) {
-    viewPortWidth = document.documentElement.clientWidth;
-    viewPortHeight = document.documentElement.clientHeight;
-  }
+        viewPortWidth = document.documentElement.clientWidth;
+        viewPortHeight = document.documentElement.clientHeight;
+    }
 
-  // older versions of IE
-  else {
-    viewPortWidth = document.getElementsByTagName('body')[0].clientWidth;
-    viewPortHeight = document.getElementsByTagName('body')[0].clientHeight;
-  }
-
-  return [viewPortWidth, viewPortHeight];
+    // older versions of IE
+    else {
+        viewPortWidth = document.getElementsByTagName('body')[0].clientWidth;
+        viewPortHeight = document.getElementsByTagName('body')[0].clientHeight;
+    }
 }
 
 var checkOrientation = function () {
-  if (window.orientation !== previousOrientation) {
-    previousOrientation = window.orientation;
-    // orientation changed, do your magic here
-  }
-  getViewport();
+    if (window.orientation !== previousOrientation) {
+        previousOrientation = window.orientation;
+        // orientation changed, do your magic here
+    }
+    updateViewPort();
 };
 
 
@@ -171,12 +172,12 @@ setInterval(checkOrientation, 2000);
 
 // On Document Load initialize everything
 $(document).ready(function () {
-  setupButtons();
-  getViewport();
-  loadCarousel();
+    setupButtons();
+    updateViewPort();
+    loadCarousel();
 
-  previousOrientation = window.orientation;
+    previousOrientation = window.orientation;
 
-  window.addEventListener("resize", checkOrientation, false);
-  window.addEventListener("orientationchange", checkOrientation, false);
+    window.addEventListener("resize", checkOrientation, false);
+    window.addEventListener("orientationchange", checkOrientation, false);
 });

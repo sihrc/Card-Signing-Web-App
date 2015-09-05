@@ -1,21 +1,9 @@
-.draw-card-canvas {
-  z-index: 20;
-  position:absolute;
-}
-.canvas-background {
-  z-index: 1;
-  position:absolute;
-}
-
 .container {
     display:inline-block;
     margin: 0 auto;
 }
 
-.stacked {
-    position:relative;
-}
-
+/* Toolbar */
 .button-tool {
   visibility: hidden;
   background: white;
@@ -44,6 +32,22 @@
   display: block;
 }
 
+/* Canvas */
+.stacked {
+    position:relative;
+} */
+
+.draw-card-canvas {
+  z-index: 20;
+  position:absolute;
+}
+
+.canvas-background {
+  z-index: 1;
+  position:absolute;
+}
+
+/* Carousel */
 .item{
   margin: 3px;
 }

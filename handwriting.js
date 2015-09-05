@@ -1,32 +1,41 @@
+// Width of pen output in SVG
 var SVG_WIDTH = 1;
 var Handwriting = (function (document) {
     "use strict";
 
     var Handwriting = function (canvas, options) {
         var opts = options || {};
-
+        // Variable Width Strokes
         this.velocityFilterWeight = opts.velocityFilterWeight || 0.7;
         this.minWidth = opts.minWidth || 0.5;
         this.maxWidth = opts.maxWidth || 2.5;
         this.dotSize = opts.dotSize || function () {
             return (this.minWidth + this.maxWidth) / 2;
         };
+
+        // Colors
         this.penColor = opts.penColor || "black";
         this.backgroundColor = opts.backgroundColor || "rgba(0,0,0,0)";
+
+        // Event Triggers
         this.onEnd = opts.onEnd;
         this.onBegin = opts.onBegin;
 
+        // Setting up Canvas and SVGCanvas - to produce SVG
         this._canvas = canvas;
         this._ctx = canvas.getContext("2d");
         this._svgctx = C2S(canvas.width, canvas.height);
         this._svgctx.strokeStyle="#000000";
 
+        // Clear existing strokes
         this.clear();
 
+        // Setup mouse / touch events for user interaction
         this._handleMouseEvents();
         this._handleTouchEvents();
     };
 
+    // Clear the canvas and SVG history
     Handwriting.prototype.clear = function () {
         var ctx = this._ctx,
             canvas = this._canvas;
@@ -38,11 +47,13 @@ var Handwriting = (function (document) {
         this.clearSVG();
     };
 
+    // Getting the base64 encoded string representation of the image
     Handwriting.prototype.toDataURL = function (imageType, quality) {
         var canvas = this._canvas;
         return canvas.toDataURL.apply(canvas, arguments);
     };
 
+    // Getting the XML encoded SVG representation of the image
     Handwriting.prototype.toSVG = function () {
         var serialized = this._svgctx.getSerializedSvg();
         var metadata = "<metadata id=\"metadata298\"><rdf:RDF><cc:Work rdf:about=\"\"><dc:format>image/svg+xml</dc:format><dc:type rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata>";
@@ -52,13 +63,14 @@ var Handwriting = (function (document) {
             " xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" +
             " xmlns=\"http://www.w3.org/2000/svg\"";
 
-
+        // Properly formatting the SVG File
         serialized = serialized.slice(0, index) + metadata + serialized.slice(index, serialized.length);
         serialized = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" + serialized;
         serialized = serialized.replace(" xmlns=\"http://www.w3.org/2000/svg\"", tags);
         return serialized;
     }
 
+    // Load from existing string encoded image
     Handwriting.prototype.fromDataURL = function (dataUrl) {
         var self = this,
             image = new Image(),
@@ -276,6 +288,7 @@ var Handwriting = (function (document) {
     };
 
     Handwriting.prototype._drawCurve = function (curve, startWidth, endWidth) {
+        // Draw curve for normal Canvas operations ( SVG clone is below )
         var ctx = this._ctx,
             widthDelta = endWidth - startWidth,
             drawSteps, width, i, t, tt, ttt, u, uu, uuu, x, y;
@@ -311,6 +324,7 @@ var Handwriting = (function (document) {
     };
 
     Handwriting.prototype._strokeWidth = function (velocity) {
+        // Calculate the variable stroke width
         return Math.max(this.maxWidth / (velocity + 1), this.minWidth);
     };
 
@@ -346,7 +360,7 @@ var Handwriting = (function (document) {
     Handwriting.prototype.getPointsSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        // Ensure lines are in SVG representation
         ctx.lineTo(x, y);
         ctx.moveTo(x, y);
         this._isEmpty = false;
@@ -355,7 +369,7 @@ var Handwriting = (function (document) {
     Handwriting.prototype.fromPointsSVG = function (x, y, size) {
         var ctx = this._svgctx;
 
-        // ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+        // Ensure lines are in SVG representation
         ctx.lineTo(x, y);
         ctx.moveTo(x, y);
         this._isEmpty = false;
@@ -365,6 +379,7 @@ var Handwriting = (function (document) {
         this._drawSteps = steps;
     }
 
+    // Drawing the curve as approximated by user input via bezier curve
     Handwriting.prototype._drawCurveSVG = function (curve, startWidth, endWidth) {
         var ctx = this._svgctx,
             widthDelta = endWidth - startWidth,
@@ -447,6 +462,7 @@ var Handwriting = (function (document) {
         return length;
     };
 
+    // Calculate next Bezier point based on control points and input
     Bezier.prototype._point = function (t, start, c1, c2, end) {
         return          start * (1.0 - t) * (1.0 - t)  * (1.0 - t)
                + 3.0 *  c1    * (1.0 - t) * (1.0 - t)  * t

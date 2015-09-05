@@ -12,12 +12,11 @@ viewPortHeight;
 var undoStack = [],
 redoStack = [];
 
-// Preload images into carousel
-for (var num = 1; num <= 14; num++) {
-    $('.owl-carousel').append("<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" class=\"lazyOwl\" src=\"" + "./samples/fullsize-" + num + ".jpg" + "\"></img></div>")
-}
-
 function loadCarousel() {
+    // Preload images into carousel
+    for (var num = 1; num <= 14; num++) {
+        $('.owl-carousel').append("<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" class=\"lazyOwl\" src=\"" + "./samples/fullsize-" + num + ".jpg" + "\"></img></div>")
+    }
     $('#carousel').owlCarousel({
         margin:10,
         loop:true,

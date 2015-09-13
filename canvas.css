@@ -35,7 +35,7 @@
 /* Canvas */
 .stacked {
     position:relative;
-} 
+}
 
 .draw-card-canvas {
   z-index: 20;
@@ -47,11 +47,8 @@
   position:absolute;
 }
 
-/* Carousel */
-.item{
-  margin: 3px;
-}
-.item img{
-  display: block;
-  height: 100px;
+.item img {
+    height: 100px;
+    width: auto;
+    margin: 3px;
 }

@@ -15,16 +15,17 @@ redoStack = [];
 function loadCarousel() {
     // Preload images into carousel
     for (var num = 1; num <= 14; num++) {
-        $('.owl-carousel').append("<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" class=\"lazyOwl\" src=\"" + "./samples/fullsize-" + num + ".jpg" + "\"></img></div>")
+        $('.carousel').append("<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" src=\"" + "./samples/fullsize-" + num + ".jpg" + "\"></img></div>")
     }
-    $('#carousel').owlCarousel({
-        margin:10,
-        loop:true,
-        autoWidth:true,
-        items:4
+    $('.carousel').slick({
+        dots: true,
+        speed: 400,
+        slidesToShow: 4,
+        slidesToScroll: 3,
+        infinite: false,
+        variableWidth: true,
+        accessibility: true
     });
-
-    owl = $('#carousel').data('owl.carousel');
 }
 
 function chooseImage(src) {
@@ -58,7 +59,9 @@ function previewFile() {
     var reader = new FileReader();
 
     reader.onloadend = function () {
-        owl.add("<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" class=\"lazyOwl\" src=\"" + reader.result + "\"></img></div>", 0);
+        $('.carousel').slick("slickAdd", "<div class=\"item\"> <img onclick=\"chooseImage(this.src)\" class=\"lazyOwl\" src=\"" + reader.result + "\"></img></div>", 0);
+        $('.carousel').slick('slickGoTo', 0);
+        chooseImage(reader.result);
     }
 
     if (file) {
